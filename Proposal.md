@@ -4,7 +4,8 @@
 
 We take an open source microservice based
 project base and add some metrics and health
-checks using Prometheus.
+checks using Prometheus. All metrics time-series
+are made visible in a Grafana dashboard.
 
 ## Data
 - Dockerfile including all Microservices,
