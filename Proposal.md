@@ -1,8 +1,15 @@
-Project Proposal
+# Project Proposal
+
+## Description
 
 We take an open source microservice based
 project base and add some metrics and health
-checks.
+checks using Prometheus.
+
+## Data
+- Dockerfile including all Microservices,
+- Deployment.yml
+- Prometheus.yml
 
 Code-Base:
 ?????
