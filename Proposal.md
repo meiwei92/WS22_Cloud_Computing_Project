@@ -26,3 +26,4 @@ does not expose one.
 - 31.12.22 Setup of kubernetes environment on top (Michael)
 - 06.01.23 Setup of Prometheus and first health check (Severin)
 - 10.01.23 Setup of Grafana GUI to display metrics time-series (Michael)
+- 12.01.23 Final Readme.md (Severin & Michael)
