@@ -1,8 +1,8 @@
 # Project Proposal
 
 ## Project Contributors
-Weikl, Michael
-Bergsmann, Severin
+- Weikl, Michael
+- Bergsmann, Severin
 
 ## Definition and Scope
 
