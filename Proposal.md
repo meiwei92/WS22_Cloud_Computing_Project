@@ -31,18 +31,13 @@ The features are account service, statistics service and notification service.
 ![image](https://user-images.githubusercontent.com/29523118/208733840-3179522f-9da6-49c1-a323-f69e3166f144.png)
 
 ## Metrics
-TODO
+The metrics we consider to monitor are of course basic metrics like up-time of the containers, response times and error rate increases through new deployments. Additionally we try to show memory usage through continuous input streams and predict the moment when the disk needs to be resized using predict_linear() function of prometheus.
 
 ## Deployment Architecture
 Local Docker Cluster (using docker-compose)
 
 ## Prometheus and Grafana
-We use those two frameworks for fetching and displaying metrics of the microservice architecture. Prometheus fetches specific metrics from exposed endpoints on the consecutive microservice containers and Grafana displays the collected time-series metrics.
-
-## Data
-- Dockerfile including all Microservices
-- Deployment.yml
-- Prometheus.yml
+We use those two frameworks for fetching and displaying metrics of the microservice architecture. Prometheus fetches specific metrics from exposed endpoints on the consecutive microservice containers and Grafana displays the collected time-series metrics. Prometheus is an open-source monitoring solution for metrics. Grafana is an operational dashboard to visualize metrics.
 
 ## Milestones
 - 27.12.22 Setup of base docker containers (Severin)
