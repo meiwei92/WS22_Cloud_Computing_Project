@@ -70,7 +70,10 @@ services:
   auth-mongodb:
     environment:
       MONGODB_PASSWORD: $MONGODB_PASSWORD
-    image: sqshq/piggymetrics-mongodb
+      MONGODB_EXPORTER_PASSWORD: $MONGODB_EXPORTER_PASSWORD
+      MONGO_INITDB_ROOT_USERNAME: $MONGO_INITDB_ROOT_USERNAME
+      MONGO_INITDB_ROOT_PASSWORD: $MONGO_INITDB_ROOT_PASSWORD
+    image: piggy_mongodb:exportable
     restart: always
     logging:
       options:
@@ -79,7 +82,6 @@ services:
         
   auth-mongodb-prometheus-exporter:
     environment:
-      LOG_LEVEL: debug
       MONGODB_URI: "mongodb://exporter:$MONGODB_EXPORTER_PASSWORD@auth-mongodb:27017/admin"
     image: percona/mongodb_exporter:0.36.0
     restart: always
@@ -111,7 +113,10 @@ services:
     environment:
       INIT_DUMP: account-service-dump.js
       MONGODB_PASSWORD: $MONGODB_PASSWORD
-    image: sqshq/piggymetrics-mongodb
+      MONGODB_EXPORTER_PASSWORD: $MONGODB_EXPORTER_PASSWORD
+      MONGO_INITDB_ROOT_USERNAME: $MONGO_INITDB_ROOT_USERNAME
+      MONGO_INITDB_ROOT_PASSWORD: $MONGO_INITDB_ROOT_PASSWORD
+    image: piggy_mongodb:exportable
     restart: always
     logging:
       options:
@@ -120,7 +125,6 @@ services:
         
   account-mongodb-prometheus-exporter:
     environment:
-      LOG_LEVEL: debug
       MONGODB_URI: "mongodb://exporter:$MONGODB_EXPORTER_PASSWORD@account-mongodb:27017/admin"
     image: percona/mongodb_exporter:0.36.0
     restart: always
@@ -151,7 +155,10 @@ services:
   statistics-mongodb:
     environment:
       MONGODB_PASSWORD: $MONGODB_PASSWORD
-    image: sqshq/piggymetrics-mongodb
+      MONGODB_EXPORTER_PASSWORD: $MONGODB_EXPORTER_PASSWORD
+      MONGO_INITDB_ROOT_USERNAME: $MONGO_INITDB_ROOT_USERNAME
+      MONGO_INITDB_ROOT_PASSWORD: $MONGO_INITDB_ROOT_PASSWORD
+    image: piggy_mongodb:exportable
     restart: always
     logging:
       options:
@@ -160,7 +167,6 @@ services:
         
   statistics-mongodb-prometheus-exporter:
     environment:
-      LOG_LEVEL: debug
       MONGODB_URI: "mongodb://exporter:$MONGODB_EXPORTER_PASSWORD@statistics-mongodb:27017/admin"
     image: percona/mongodb_exporter:0.36.0
     restart: always
@@ -189,10 +195,13 @@ services:
         max-file: "10"
 
   notification-mongodb:
-    image: sqshq/piggymetrics-mongodb
-    restart: always
     environment:
       MONGODB_PASSWORD: $MONGODB_PASSWORD
+      MONGODB_EXPORTER_PASSWORD: $MONGODB_EXPORTER_PASSWORD
+      MONGO_INITDB_ROOT_USERNAME: $MONGO_INITDB_ROOT_USERNAME
+      MONGO_INITDB_ROOT_PASSWORD: $MONGO_INITDB_ROOT_PASSWORD
+    image: piggy_mongodb:exportable
+    restart: always
     logging:
       options:
         max-size: "10m"
@@ -200,13 +209,17 @@ services:
         
   notification-mongodb-prometheus-exporter:
     environment:
-      MONGODB_URI: "mongodb://user:$MONGODB_PASSWORD@notification-mongodb:27017"
+      MONGODB_URI: "mongodb://exporter:$MONGODB_EXPORTER_PASSWORD@notification-mongodb:27017/admin"
     image: percona/mongodb_exporter:0.36.0
     restart: always
+    ports:
+      - 9516:9216
     logging:
       options:
         max-size: "10m"
         max-file: "10"
+    depends_on:
+      - notification-mongodb
 
   monitoring:
     environment:
@@ -237,7 +250,7 @@ services:
       options:
         max-size: "10m"
         max-file: "10"
-        
+
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
@@ -248,6 +261,13 @@ services:
     restart: unless-stopped
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
+    depends_on:
+      - cadvisor
+      - statistics-mongodb-prometheus-exporter
+      - account-mongodb-prometheus-exporter
+      - auth-mongodb-prometheus-exporter
+      - notification-mongodb-prometheus-exporter
+      
   grafana:
     image: grafana/grafana-oss:latest
     container_name: grafana
@@ -257,10 +277,11 @@ services:
       - "3000:3000"
     volumes:
       - ./grafana:/var/lib/grafana
+    #user: "104"
     restart: unless-stopped
 
   cadvisor:
-    image: google/cadvisor:latest
+    image: gcr.io/cadvisor/cadvisor:latest
     container_name: cadvisor
     ports:
       - "8080:8080"
@@ -269,6 +290,5 @@ services:
       - /var/run:/var/run:ro
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
-      - /dev/disk:/deev/disk:ro
     devices:
       - /dev/kmsg
