@@ -11,12 +11,48 @@ The grafana container runs with the user 472. Since it can't be guaranteed that 
 
     chmod 766 -R ./grafana
 
+ ## Microservice Performance Surveillance with Prometheus and Grafana
+ 
+ In order to set up the PiggyMetrics docker cluster with all mongodb-exporters and cadvisor, run
+ 
+    docker-compose up
+    
+in the same directory where the docker-compose file is located. After all SpringBoot applications started one can inspect the different services
+Piggymetrics
 
- ## Microservice Performance Surveillance with Prometheus
+    localhost:80
+    
+Prometheus interface
+
+    localhost:9090
+    
+Grafana Dashboard (login: admin/admin)
+
+    localhost:3000
+    
+account service mongo db exporter metrics
+
+    localhost:9216/metrics
+    
+authentication service mongo db exporter metrics
+
+    localhost:9316/metrics
+    
+statistics service mongo db exporter metrics
+
+    localhost:9416/metrics
+    
+notification service mongo db exporter metrics
+
+    localhost:9516/metrics
 
 ## Research Summary
 - [Microservice List](https://github.com/davidetaibi/Microservices_Project_List)
-
-## Tutorial
+- [Prometheus Docs](https://prometheus.io/docs/introduction/overview/)
+- [Grafana Docs](https://grafana.com/docs/grafana/latest/)
+- [MongoDB-Exporter](https://github.com/percona/mongodb_exporter)
+- [CAdvisor Prometheus Extension](https://prometheus.io/docs/guides/cadvisor/)
+- [Prometheus Exporters](https://prometheus.io/docs/instrumenting/exporters/)
 
 ## Lessons-Learned and Caveats
+- MongoDB Setup may not contain necessary configuration to simply add exporters due to missing permissions and credentials
