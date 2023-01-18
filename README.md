@@ -56,3 +56,6 @@ notification service mongo db exporter metrics
 
 ## Lessons-Learned and Caveats
 - MongoDB Setup may not contain necessary configuration to simply add exporters due to missing permissions and credentials
+- Fully understand a project before working with it
+- Check functionality beforehand
+
